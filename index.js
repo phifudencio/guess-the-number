@@ -48,20 +48,68 @@ function random(minNum, maxNum) {
 
 //Start CxC
 async function startCxC() {
+  let minNum = 1;
   let maxNum = 100; // number max to be generate
   let guessCount = 7; // Number of Guesses atempt
-  let randomNum = random(1, 100); // Generates random number
-  let megatron = randomNum;
-  let optimus = randomNum;
-  console.log(`Megatron : I WILL WIN BY ANY MEANS! AT ANY COST!\n\n\n\n`);
+  let randomNum = random(minNum, maxNum); // Generates random number
+
+  console.log(`\n\nMegatron : I WILL WIN BY ANY MEANS! AT ANY COST!\n`);
   console.log(
-    `Optimus Prime: Even If You Defeat Me, Megatron. Others Will Rise To Defeat Your Tyranny! `
+    `Optimus Prime: Even If You Defeat Me, Megatron. Others Will Rise To Defeat Your Tyranny! \n`
   );
 
   console.log(
-    "Optimus Prime : Pick your number lets see whos is going to win Megatron!"
+    "Optimus Prime : Pick your number lets see whos is going to win Megatron!\n"
   );
+
+  let choosePlayer = await ask(
+    "Witch robot you want to choose? 1 - Optimus Prime \n2 - Megatron\n>_"
+  );
+  let player1;
+  let player2;
+  if (choosePlayer == 1) {
+    player1 = "Optimus Prime";
+    player2 = "Megatron";
+  } else if (choosePlayer == 2) {
+    player2 = "Optimus Prime";
+    player1 = "Megatron";
+  }
+
+  startGame();
+  function startGame() {
+    let minNum = 1;
+    let maxNum = 100;
+    let guessCount = 7;
+    let randomNum = random(minNum, maxNum);
+    let play1Num = randomNum;
+    let play2Num = random(minNum, maxNum);
+    console.log(
+      `${player1} : I'm thinking of a number between 1-100, witch one is it?\n`
+    );
+
+    while (guessCount >= 1) {
+      console.log(` ${player2}: Is it  ${play2Num} ? \n`);
+      if (play2Num === play1Num) {
+        console.log(`Is equal!`);
+        process.exit();
+      } else if (guessCount <= 1) {
+        console.log(`byeee!`);
+        process.exit();
+      } else if (play1Num > play2Num) {
+        console.log(`${player1} : My number is higher!`);
+        guessCount--;
+        minNum = play2Num;
+        play2Num = random(minNum, maxNum);
+      } else if (play1Num < play2Num) {
+        console.log(`${player1} : My number lower!`);
+        guessCount--;
+        maxNum = play2Num;
+        play2Num = random(minNum, maxNum);
+      }
+    }
+  }
 }
+
 //Player X Computer Mode
 async function startPxC() {
   let mode = await ask(
@@ -126,19 +174,19 @@ async function startCGuess() {
         guessCount--;
         maxNum = randomNum;
         randomNum = random(minNum, maxNum);
-      
       } else if (pc === "higher" || pc === "l") {
         guessCount--;
         minNum = randomNum;
         randomNum = random(minNum, maxNum);
       }
-    }else if(randomNum === playerNum){
-      console.log(`I won!!!`)
+    } else if (randomNum === playerNum) {
+      console.log(`I won!!!`);
+    } else if (guessCount === 0) {
+      console.log("You lost!");
+      process.exit();
+    } else {
+      return;
     }
-  }
-  if (guessCount === 0) {
-    console.log("You lost!");
-    process.exit();
   }
 }
 
